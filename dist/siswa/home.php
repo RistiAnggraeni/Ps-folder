@@ -21,16 +21,16 @@
         </div>
     </div>
     <div class="d-flex justify-content-center justify-items-center">
-        <div class="card mb-4 w-50 ms-2 me-2" style="background-color: #589BFF;">
+        <div class="card mb-4 w-75 " style="background-color: #589BFF;">
             <form>
                 <div class="card-body">
-                    <select class="form-select w-50" aria-label="Default select example">
+                    <select class="form-select" aria-label="Default select example">
                         <option selected>Ditujukan Kepada......</option>
                         <option value="1">Agus one only- Waka Kesiswaan</option>
                         <option value="2">Ahmadi- Waka Sarpras</option>
                         <option value="3">Mift- Kakomli</option>
                     </select>
-                    <div class="form-floating w-50 mt-2">
+                    <div class="form-floating w-auto mt-2">
                         <input class="form-control" placeholder="Leave a comment here" id="floatinginput"></input>
                         <label for="floatingTextarea">Judul</label>
                     </div>

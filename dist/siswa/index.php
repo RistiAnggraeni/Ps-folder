@@ -285,7 +285,23 @@
             option_sparkline3,
         );
         sparkline3.render();
-    </script> <!--end::Script-->
+        const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('#cardWrapper .card');
+
+    searchInput.addEventListener('input', () => {
+      const searchText = searchInput.value.toLowerCase();
+
+      cards.forEach(card => {
+        const cardData = card.getAttribute('data-search');
+        if (cardData.includes(searchText)) {
+          card.style.display = 'block'; // Tampilkan card jika cocok
+        } else {
+          card.style.display = 'none'; // Sembunyikan card jika tidak cocok
+        }
+      });
+    });
+    </script>
+    
 </body><!--end::Body-->
 
 </html>

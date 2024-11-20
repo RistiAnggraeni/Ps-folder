@@ -44,7 +44,7 @@
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="?page=daftar">Daftar Guru</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="login.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="../../login.php">Logout</a></li>
 
                     </ul>
                 </li>

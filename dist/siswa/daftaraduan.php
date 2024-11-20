@@ -6,7 +6,7 @@
                         <div class="d-flex align-items-center">
                                 <a href="index.php" class="btn btn-primary me-3"><i class="bi bi-arrow-left"></i></a>
                                 <h3 class="mb-0 " style="color: #09B2F5;"><b>Daftar Aduan Anda</b></h3>
-                            </div>
+                        </div>
                     </div> <!--end::Row-->
                 </div> <!--end::Container-->
             </div> <!--end::App Content Header--> <!--begin::App Content-->

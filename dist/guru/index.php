@@ -42,7 +42,7 @@
                         <li><hr class="dropdown-divider" /></li>                
                         <li><a class="dropdown-item" href="?page=akunguru">Akun</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="login.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="../../loginguru.php">Logout</a></li>
 
                     </ul>
                 </li>

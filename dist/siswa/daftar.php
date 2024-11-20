@@ -1,4 +1,4 @@
-<main class="app-main"> <!--begin::App Content Header-->
+
             <div class="app-content-header"> <!--begin::Container-->
                 <div class="container-fluid"> <!--begin::Row-->
                     <div class="row">
@@ -32,7 +32,7 @@
         <div class="card-body row">
           <h5 class="card-title">Nama Guru: Bapak Ahmad</h5>
           <p class="card-text">Mata Pelajaran: Matematika</p>
-          <a href="?page=index" class="btn btn-primary w-100 mt-3">Buat Pengaduan</a>
+          <a href="index.php" class="btn btn-primary w-100 mt-3">Buat Pengaduan</a>
         </div>
       </div>
 
@@ -41,7 +41,7 @@
         <div class="card-body row">
           <h5 class="card-title">Nama Guru: Ibu Siti</h5>
           <p class="card-text">Mata Pelajaran: Bahasa Indonesia</p>
-          <a href="?page=index" class="btn btn-primary w-100 mt-3">Buat Pengaduan</a>
+          <a href="index.php" class="btn btn-primary w-100 mt-3">Buat Pengaduan</a>
         </div>
       </div>
 
@@ -50,7 +50,7 @@
         <div class="card-body row">
           <h5 class="card-title">Nama Guru: Bapak Ali</h5>
           <p class="card-text">Mata Pelajaran: Fisika</p>
-          <a href="?page=index" class="btn btn-primary w-100 mt-3">Buat Pengaduan</a>
+          <a href="index.php" class="btn btn-primary w-100 mt-3">Buat Pengaduan</a>
         </div>
       </div>
     </div>

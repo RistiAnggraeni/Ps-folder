@@ -1,4 +1,4 @@
-</nav>
+
     <div class="app-content">
         <div class="container-fluid d-flex justify-items-center justify-content-center flex-row gap-5 mt-3 mb-2">
             <div class="small-box text-white w-auto p-3 rounded" style="background-color: #589BFF;">

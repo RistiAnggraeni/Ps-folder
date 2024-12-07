@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Izinkan file gambar diakses
+    RewriteCond %{REQUEST_URI} !\.(jpg|jpeg|png|gif)$ [NC]
+    RewriteRule ^.*$ - [R=403,L]
+</IfModule>

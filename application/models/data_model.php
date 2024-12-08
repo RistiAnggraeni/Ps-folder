@@ -22,12 +22,14 @@ class Data_model extends CI_Model {
         return $this->db->get('daftar_reset')->result_array();
     }
     public function get_user_by_id($id) {
-        $this->db->where('id_petugas', $id);
-        $query = $this->db->get('data_petugas'); // Ganti 'users' sesuai dengan nama tabel Anda
-        return $query->row_array(); // Ambil hasil sebagai array
+        $id_hash = md5($id);
+        $this->db->where('md5(id_petugas)', $id_hash);
+        $query = $this->db->get('data_petugas'); 
+        return $query->row_array(); 
     }
     public function get_user_by_nis($nis) {
-        $this->db->where('nis', $nis);
+        $nis_hash = md5($nis); 
+        $this->db->where('md5(nis)', $nis_hash);
         $query = $this->db->get('data_siswa');
         return $query->row_array(); 
     }

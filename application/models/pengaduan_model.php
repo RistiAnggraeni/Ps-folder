@@ -19,8 +19,7 @@ class Pengaduan_model extends CI_Model
     }
     public function get_pengaduan_by_petugas()
     {
-
-    $this->db->select('pengaduan.*, data_siswa.username');
+        $this->db->select('pengaduan.*, data_siswa.username, md5(pengaduan.id_pengaduan) as pengaduan_hash');
         $this->db->from('pengaduan');
         $this->db->join('data_siswa', 'pengaduan.nis = data_siswa.nis', 'left');
 
@@ -61,10 +60,24 @@ class Pengaduan_model extends CI_Model
         return $query->result_array(); 
     }
     public function get_pengaduan_by_id($id_pengaduan)
-{
-    $this->db->where('id_pengaduan', $id_pengaduan);
-    $query = $this->db->get('pengaduan');
-    return $query->row(); // Mengambil 1 baris data
-}
+    {
+        $this->db->select('pengaduan.*, data_petugas.nama_guru , data_petugas.jabatan, data_petugas.level');
+        $this->db->from('pengaduan'); 
+        $this->db->join('data_petugas', 'pengaduan.id_petugas = data_petugas.id_petugas', 'left');
+        $this->db->where('pengaduan.id_pengaduan', $id_pengaduan); 
+        $query = $this->db->get(); 
+        
+        return $query->row_array(); 
+    }
+    public function get_all_guru()
+    {
+        $this->db->select('id_petugas, nama_guru, jabatan, level');
+        $this->db->from('data_petugas');
+        $this->db->where('level', 'guru'); 
+        $query = $this->db->get();
+        return $query->result_array(); 
+    }
+
+
 
 }

@@ -51,8 +51,11 @@ class Pages2 extends CI_Controller
             $data['daftar_aduan'] = $this->Pengaduan_model->get_daftar_aduan($nis);        
         }
         if ($page === 'editpengaduan-siswa') {
+            $id_pengaduan = $this->input->get('id_pengaduan');
             $data['aduan'] = $this->Pengaduan_model->get_pengaduan_by_id($id_pengaduan);
+            $data['data_petugas'] = $this->Pengaduan_model->get_all_guru(); // Mengambil data semua guru
         }
+
 
 
         // Muat konten halaman

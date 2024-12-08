@@ -84,40 +84,43 @@ class Pengaduan extends CI_Controller
     redirect('pages2/daftaraduan');
 }
 public function updatepengaduan($id_pengaduan)
-{
-    // Menyiapkan data untuk update
-    $data = [
-        'judul_pengaduan' => $this->input->post('judul'),
-        'isi_laporan' => $this->input->post('isi_laporan'),
-        'id_petugas' => $this->input->post('kepada'), // Jika perlu disesuaikan
-    ];
+    {
+        
+        $data = [
+            'judul_pengaduan' => $this->input->post('judul'),
+            'isi_laporan' => $this->input->post('isi_laporan'),
+            'id_petugas' => $this->input->post('kepada'), // Jika perlu disesuaikan
+        ];
 
-    // Jika gambar baru diupload
-    if ($_FILES['gambar']['name']) {
-        // Menangani upload gambar
-        $config['upload_path'] = './uploads/';
-        $config['allowed_types'] = 'jpg|jpeg|png';
-        $config['max_size'] = 2048;
+        if ($_FILES['gambar']['name']) {
+            // Menangani upload gambar
+            $config['upload_path'] = './uploads/';
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['max_size'] = 2048;
 
-        $this->load->library('upload', $config);
+            $this->load->library('upload', $config);
 
-        if ($this->upload->do_upload('gambar')) {
-            $upload_data = $this->upload->data();
-            $data['gambar'] = $upload_data['file_name']; // Menyimpan nama file gambar baru
+            if ($this->upload->do_upload('gambar')) {
+                $upload_data = $this->upload->data();
+                $data['gambar'] = $upload_data['file_name'];
+            } else {
+                // Menangani error upload gambar
+                $this->session->set_flashdata('error', 'Gagal mengunggah gambar: ' . $this->upload->display_errors('', ''));
+                redirect('pages2/daftaraduan');
+                return;
+            }
         }
+
+        $this->db->where('id_pengaduan', $id_pengaduan);
+        $update_status = $this->db->update('pengaduan', $data);
+
+        if ($update_status) {
+            $this->session->set_flashdata('success', 'Aduan berhasil diperbarui.');
+        } else {
+            $this->session->set_flashdata('error', 'Aduan tidak berhasil diperbarui.');
+        }
+
+        // Redirect kembali ke halaman daftar aduan
+        redirect('pages2/daftaraduan');
     }
-
-    // Update data pengaduan di database
-    $this->db->where('id_pengaduan', $id_pengaduan);
-    $this->db->update('pengaduan', $data);
-
-    // Set flashdata untuk pesan sukses
-    $this->session->set_flashdata('message', 'Aduan berhasil diperbarui.');
-
-    // Redirect kembali ke halaman daftar aduan
-    redirect('pages2/daftaraduan');
-}
-
-
-
 }

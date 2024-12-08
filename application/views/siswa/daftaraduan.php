@@ -9,7 +9,13 @@
             </div>
         </div>
     </div>
+    <?php if ($this->session->flashdata('success')): ?>
+                <div class="m-1 alert alert-success"><?= $this->session->flashdata('success') ?></div>
+            <?php endif; ?>
 
+            <?php if ($this->session->flashdata('error')): ?>
+                <div class="m-1 alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+            <?php endif; ?>
     <div class="container">
         <?php foreach ($daftar_aduan as $aduan): ?>
             <div class="row justify-content-center">
@@ -35,7 +41,7 @@
                                 </div>
                                 <div class="d-flex justify-content-between mt-4">
                                     <?php if ($aduan['status'] === 'belum ditanggapi') : ?>
-                                        <a href="<?= site_url('pages2/editpengaduan-siswa/'.$aduan['id_pengaduan']); ?>" class="btn w-auto text-white btn-primary">Edit</a>
+                                        <a href="<?= site_url('pages2/editpengaduan-siswa?id_pengaduan='.$aduan['id_pengaduan']); ?>" class="btn w-auto text-white btn-primary">Edit</a>
                                         <a href="<?= site_url('pengaduan/hapusaduan/'.$aduan['id_pengaduan']); ?>" class="btn w-auto text-white btn-danger" onclick="return confirmDelete();">Hapus</a>
                                     <?php elseif ($aduan['status'] === 'ditanggapi') : ?>
                                         <a href="<?= site_url('pages2/chat-siswa/'.$aduan['id_pengaduan']); ?>" class="btn w-auto text-white btn-success">Buka</a>

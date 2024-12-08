@@ -48,7 +48,7 @@
                                                 <td><?= $s['nis']; ?></td>
                                                 <td><?= $s['kelas']; ?></td>
                                                 <td>
-                                                   <a class="btn btn-primary" href="<?= site_url('pages/rincisiswa?nis=' . $s['nis']); ?>">Rinci</a>
+                                                   <a class="btn btn-primary" href="<?= site_url('pages/rincisiswa?nis=' . md5($s['nis'])); ?>">Rinci</a>
 
                                                     <a class="btn btn-warning" href="<?= site_url('pages/reset_password2/' . $s['nis']); ?>" onclick="return confirm('Apakah Anda yakin ingin me-reset password akun ini?');">Reset</a>
                                                     <a class="btn btn-danger" href="<?= site_url('pages/hapus_siswa/' . $s['nis']); ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus akun ini?');">Hapus</a>

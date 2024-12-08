@@ -1,7 +1,7 @@
 <?php
-$nis = $this->input->get('nis'); 
+$nis_hash = $this->input->get('nis'); 
 
-$siswa = $this->db->get_where('data_siswa', ['nis' => $nis])->row_array();
+$siswa = $this->db->get_where('data_siswa', ['md5(nis)' => $nis_hash])->row_array();
 
 if (!$siswa) {
     echo "Data tidak ditemukan.";
@@ -70,7 +70,6 @@ if (!$siswa) {
                 </main>
             </div>
             
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
+        
     </body>
 </html>

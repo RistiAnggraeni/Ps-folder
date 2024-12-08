@@ -46,7 +46,7 @@
                                                 <td><?= $s['level']; ?></td>
                                                 
                                                 <td>
-                                                    <a class="btn btn-primary" href="<?= site_url('pages/rinciguru?id=' . $s['id_petugas']); ?>">Rinci</a>
+                                                    <a class="btn btn-primary" href="<?= site_url('pages/rinciguru?id=' . md5($s['id_petugas'])); ?>">Rinci</a>
 
                                                     <a class="btn btn-warning" href="<?= site_url('pages/reset_password/' . $s['id_petugas']); ?>" onclick="return confirm('Apakah Anda yakin ingin me-reset password akun ini?');">Reset</a>
                                                     <a class="btn btn-danger" href="<?= site_url('pages/hapus_petugas/' . $s['id_petugas']); ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus akun ini?');">Hapus</a>

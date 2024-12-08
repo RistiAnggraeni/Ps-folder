@@ -37,6 +37,43 @@ class Pages3 extends CI_Controller
             $data['pengaduan'] = $this->Pengaduan_model->get_pengaduan_by_petugas();
                 
         }
+        if ($page === 'chat-guru') {
+            // Ambil pengaduan hash dari request
+            $pengaduan_hash = $this->input->get('id_pengaduan');
+
+            if (!$pengaduan_hash) {
+                show_error('Data tidak valid.', 404, 'Not Found');
+            }
+
+            $this->db->select('pengaduan.*, data_siswa.username, data_siswa.nis');
+            $this->db->from('pengaduan');
+            $this->db->join('data_siswa', 'pengaduan.nis = data_siswa.nis', 'left');
+            $this->db->where('md5(pengaduan.id_pengaduan)', $pengaduan_hash);
+            $pengaduan = $this->db->get()->row_array();
+
+            if (!$pengaduan) {
+                show_error('Pengaduan tidak ditemukan.', 404, 'Not Found');
+            }
+
+            if ($pengaduan['status_nama'] == '1') {
+                $pengaduan['username'] = substr($pengaduan['username'], 0, 1) . str_repeat('*', strlen($pengaduan['username']) - 1);
+            }
+
+            // Ambil tanggapan berdasarkan id_pengaduan
+            $this->db->select('*');
+            $this->db->from('tanggapan');
+            $this->db->where('id_pengaduan', $pengaduan['id_pengaduan']);
+            $this->db->order_by('tgl_tanggapan', 'ASC');
+            $this->db->order_by('jam_menit', 'ASC');
+            $tanggapan = $this->db->get()->result_array();
+
+            $data = [
+                'pengaduan' => $pengaduan,
+                'tanggapan' => $tanggapan,
+            ];
+
+        }
+
 
         // Muat konten halaman
         $data['content'] = $this->load->view('guru/' . $page, isset($data) ? $data : [], true);

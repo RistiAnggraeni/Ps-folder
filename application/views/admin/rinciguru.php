@@ -1,9 +1,9 @@
 <?php
 
-$id = $this->input->get('id'); 
+$id_hash = $this->input->get('id'); 
 
 
-$petugas = $this->db->get_where('data_petugas', ['id_petugas' => $id])->row_array();
+$petugas = $this->db->get_where('data_petugas', ['md5(id_petugas)' => $id_hash])->row_array();
 
 
 if (!$petugas) {
@@ -81,7 +81,5 @@ if (!$petugas) {
                 </main>
             </div>
             
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
     </body>
 </html>

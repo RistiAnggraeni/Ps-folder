@@ -79,6 +79,7 @@ class Auth_siswa extends CI_Controller {
         $this->session->set_userdata('logged_in', true);
         $this->session->set_userdata('user_data', $user);
         $this->session->set_userdata('nis', $user['nis']);
+        $this->session->set_userdata('level', $user['level']);
         $this->session->set_userdata('username', $user['username']);
 
         redirect(site_url('pages2/home'));

@@ -22,7 +22,7 @@
                 <div class="col-md-11 p-2">
                     <div class="card shadow-lg border-0 rounded-lg mt-2">
                         <div class="card-body rounded" style="background-color: #09B2F5;">
-                            <div class="float-sm-end text-white"><?= date('d/m/Y H:i', strtotime($aduan['tgl_pengaduan'] . ' ' . $aduan['waktu'])) ?></div>
+                            <div class="float-sm-end text-white"><?= date('d/m/Y', strtotime($aduan['tgl_pengaduan'])) ?></div>
                             <form>
                                 <div class="form-floating mb-3 col-md-5">
                                     <input class="form-control" readonly type="text" value="<?= $aduan['nama_guru']; ?>" />
@@ -41,10 +41,10 @@
                                 </div>
                                 <div class="d-flex justify-content-between mt-4">
                                     <?php if ($aduan['status'] === 'belum ditanggapi') : ?>
-                                        <a href="<?= site_url('pages2/editpengaduan-siswa?id_pengaduan='.$aduan['id_pengaduan']); ?>" class="btn w-auto text-white btn-primary">Edit</a>
+                                        <a href="<?= site_url('pages2/editpengaduan-siswa?id_pengaduan='.md5($aduan['id_pengaduan'])); ?>" class="btn w-auto text-white btn-primary">Edit</a>
                                         <a href="<?= site_url('pengaduan/hapusaduan/'.$aduan['id_pengaduan']); ?>" class="btn w-auto text-white btn-danger" onclick="return confirmDelete();">Hapus</a>
                                     <?php elseif ($aduan['status'] === 'ditanggapi') : ?>
-                                        <a href="<?= site_url('pages2/chat-siswa/'.$aduan['id_pengaduan']); ?>" class="btn w-auto text-white btn-success">Buka</a>
+                                        <a href="<?= site_url('pages2/chat-siswa?id_pengaduan=' . md5($aduan['id_pengaduan'])); ?>" class="btn w-auto text-white btn-primary">Buka</a>
                                     <?php elseif ($aduan['status'] === 'finish' || $aduan['status'] === 'endelete') : ?>
                                         <button  class="btn btn-success">Pengaduan Selesai</button>
                                     <?php endif; ?>

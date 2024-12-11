@@ -47,7 +47,7 @@
                             </div>
                             <!-- Tombol Update -->
                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0 col-md-2 ms-auto p-2">
-                                <button type="submit" class="btn w-100 text-white btn-primary">Update</button>
+                                <button type="submit" class="btn w-100 text-white btn-primary" onclick="return confirm('Apakah Anda yakin ingin mengubah pengaduan ini?'); ">Update</button>
                             </div>
                         </form>
                     </div>

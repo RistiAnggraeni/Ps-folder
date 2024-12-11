@@ -15,9 +15,9 @@ class Petugas_model extends CI_Model
     }
     public function get_all_petugas()
     {
-        $this->db->where('level', 'guru');  // Pastikan ada kolom 'level' dengan nilai 'guru'
-        $query = $this->db->get('data_petugas'); // Sesuaikan dengan nama tabel yang digunakan
-        return $query->result_array();  // Mengambil hasil sebagai array
+        $this->db->where('level', 'guru'); 
+        $query = $this->db->get('data_petugas'); 
+        return $query->result_array(); 
         
     }
 }

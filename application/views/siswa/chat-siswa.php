@@ -1,85 +1,164 @@
+<?php
+$pengaduan_hash = $this->input->get('id_pengaduan');
 
-            <div class="app-content-header"> <!--begin::Container-->
-                <div class="container-fluid"> <!--begin::Row-->
-                    <div class="row">
-                        <div class="col-sm-6">
-                                
-                            
-                            <div class="d-flex align-items-center">
-                                <a href="index.php" class="btn btn-primary"><i class="bi bi-arrow-left"></i></a>
-                                    <i class="bi bi-person-circle primary ms-4" style="color: #589BFF; font-size: 40px;"></i>
-                                    <span class="text-primary ms-3 align-text-center"><b>Akun e dia</b></span>
+?>
+<div class="app-content-header"> 
+    
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="d-flex align-items-center">
+                    <a href="<?= site_url('pages2/home')?>" class="btn btn-primary"><i class="bi bi-arrow-left"></i></a>
+                    <i class="bi bi-person-circle primary ms-4" style="color: #589BFF; font-size: 40px;"></i>
+                    <span class="text-primary ms-3 align-text-center"><b><?= $pengaduan['nama_guru'] ?></b></span>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    
+</div>
 
-                            </div>
-                            
-                        </div>
-                         
-                    </div> <!--end::Row-->
-                </div> <!--end::Container-->
-            </div> <!--end::App Content Header--> <!--begin::App Content-->
-             <!--begin::Container-->
-             <hr style="height: 5px; background: black;">
-                <div class="app-content ">
-                    <div class="row ms-auto me-auto justify-content-center w-auto mb-2">
-                            <div class="col-md-11 p-2">
-                                <div class="card shadow-lg border-0 rounded-lg mt-2">
-                                    <div class="card-body rounded" style="background-color: #09B2F5;">
-                                    <div class="card-body" style="background-color: #09B2F5;">
-                                    <div class="float-sm-end text-white">10/09/2024</div>
-                                        <form>
-                                            
-                                            <div class="form-floating mb-3 col-md-5">
-                                                <input class="form-control" id="inputEmail" readonly type="text" placeholder="name@example.com" value="Halo Boss" />
-                                                <label for="floatingTextarea2">Judul : </label> 
-                                            </div>
-                                            <div class="form-floating mb-2">
-                                                <img src="../assets/img/c2.jpg" class="img-thumbnail w-25" alt="Bukti Foto" id="foto">
-                                            </div>
-                                            <div class="form-floating">
-                                              <textarea class="form-control" readonly placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px">Ngaso Sek Bolo</textarea>
-                                              <label for="floatingTextarea2">Isi Pengaduan</label>
-                                            </div>
-                                            
-                                        </form>
-                                    </div>
+
+<!--begin::App Content-->
+<hr style="height: 5px; background: black;">
+<?php if ($this->session->flashdata('success')) : ?>
+        <div class="alert alert-success w-50 me-auto ms-auto">
+            <?= $this->session->flashdata('success'); ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($this->session->flashdata('error')) : ?>
+        <div class="alert alert-danger w-50 me-auto ms-auto">
+            <?= $this->session->flashdata('error'); ?>
+        </div>
+    <?php endif; ?>
+<div class="app-content">
+    <div class="row ms-auto me-auto justify-content-center w-auto mt-4">
+        <div class="col-md-11 p-2">
+            <div class="card shadow-lg border-0 rounded-lg">
+                
+                <div class="card-body" style="height: 500px; overflow-y: scroll;">
+                    <!-- Pengaduan Awal -->
+                    <div class="mb-4">
+                        <div class="card shadow-lg border-0 rounded-lg">
+                            <div class="card-body rounded" style="background-color: #09B2F5;">
+                                <div class="card-body" style="background-color: #09B2F5;">
+                                    <div class="float-sm-end text-white"><?= $pengaduan['tgl_pengaduan'] ?></div>
+                                    <form>
+                                        <div class="form-floating mb-3 col-md-5">
+                                            <input class="form-control" id="inputEmail" readonly type="text" placeholder="name@example.com" value="<?= $pengaduan['judul_pengaduan'] ?>" />
+                                            <label for="floatingTextarea2">Judul : </label>
+                                        </div>
+                                        <div class="form-floating mb-2">
+                                            <img src="<?= base_url('uploads/' . $pengaduan['gambar']); ?>" class="img-thumbnail w-25" alt="Bukti Foto" id="foto">
+                                        </div>
+                                        <div class="form-floating">
+                                            <textarea class="form-control h-auto" readonly placeholder="Leave a comment here" id="floatingTextarea2"></textarea>
+                                            <label for="floatingTextarea2"><?= $pengaduan['isi_laporan'] ?></label>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                        <?php
+                        $last_date = ''; 
+                        foreach ($tanggapan as $t) {
+                        // Separator waktu
+                        if ($last_date != $t['tgl_tanggapan']) {
+                            $last_date = $t['tgl_tanggapan'];
+                            echo '<div class="text-center text-muted mb-3"><small>' . date('d/m/Y', strtotime($last_date)) . '</small></div>';
+                        }
 
+                        if ($t['sender_type'] == 'siswa') {
+                            
+                            echo '<div class="d-flex justify-content-end mb-3">';
+                            echo '<div class="card text-bg-primary p-2 w-auto">';
+                            echo '<p>' . htmlspecialchars($t['tanggapan']) . '</p>';
+
+                            if (!empty($t['attachment'])) {
+                                $attachment_path = base_url('uploads/lampiran/' . $t['attachment']);
+                                $file_extension = strtolower(pathinfo($t['attachment'], PATHINFO_EXTENSION));
+
+                                // Periksa apakah file adalah gambar
+                                $image_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+                                if (in_array($file_extension, $image_extensions)) {
+                                    echo '<img src="' . $attachment_path . '" alt="Lampiran" class="img-fluid rounded my-2" style="max-width: 200px; max-height: 200px;">';
+                                } else {
+                                    echo '<a href="' . $attachment_path . '" target="_blank" class="text-white">Lihat Lampiran</a>';
+                                }
+                            }
+
+                            echo '<small class="text-end">' . date('H:i', strtotime($t['jam_menit'])) . '</small>';
+                            echo '</div></div>';
+                        }else {
+                                echo '<div class="d-flex justify-content-start mb-3">';
+                                echo '<div class="card text-bg-secondary p-2 w-auto">';
+                                echo '<p>' . htmlspecialchars($t['tanggapan']) . '</p>';
+                                if (!empty($t['attachment'])) {
+                                $attachment_path = base_url('uploads/lampiran/' . $t['attachment']);
+                                $file_extension = strtolower(pathinfo($t['attachment'], PATHINFO_EXTENSION));
+
+                                // Periksa apakah file adalah gambar
+                                $image_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+                                if (in_array($file_extension, $image_extensions)) {
+                                    echo '<img src="' . $attachment_path . '" alt="Lampiran" class="img-fluid rounded my-2" style="max-width: 200px; max-height: 200px;">';
+                                } else {
+                                    echo '<a href="' . $attachment_path . '" target="_blank" class="text-white">Lihat Lampiran</a>';
+                                }
+                            }
+                                echo '<small class="text-end">' . date('H:i', strtotime($t['jam_menit'])) . '</small>';
+                                echo '</div></div>';
+                            }
+                    }
+
+                        ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Kirim Pesan Baru -->
+    <div class="row ms-auto me-auto justify-content-center w-auto mt-2">
+        <div class="col-md-11 p-2">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-body">
+                    <form action="<?= base_url('chat/kirim_pesan_siswa'); ?>" method="POST" enctype="multipart/form-data">
+                        <div class="row g-2">
+                            
+                            <div class="col-md-10">
+                                <textarea class="form-control" name="isi_pesan" rows="2" placeholder="Type Message ..."></textarea>
+                            </div>
+                            
+                            <div class="col-md-2 d-flex justify-content-between align-items-center">
+                            <label for="lampiran" class="btn btn-outline-secondary" id="lampiranLabel">Lampiran</label>
+                            <input type="file" id="lampiran" name="lampiran" class="d-none" onchange="updateLampiranLabel()">
+                            <button type="submit" class="btn btn-primary">KIRIM</button>
+                            </div>
                         </div>
-                    <div class="card text-bg-primary mb-3 ms-auto ms-2" style="max-width: 18rem;">
-                      <div class="card-body">
-                        <h5 class="card-title d-flex">P</h5>
-                      </div>
-                      <div class="card-footer h-auto ">
-                          <p class="card-text text-sm-end"><small>10/09/2024</small></p>
-                      </div>
-                    </div>
-                    <div class="card text-bg-secondary mb-3 ms-2" style="max-width: 18rem;">
-                      <div class="card-body">
-                        <h5 class="card-title d-flex">Pie?</h5>
-                      </div>
-                      <div class="card-footer h-auto ">
-                          <p class="card-text text-sm-end"><small>11/09/2024</small></p>
-                      </div>
-                    </div>
-                    <div class="card text-bg-primary mb-3 ms-auto ms-2" style="max-width: 18rem;">
-                      <div class="card-body">
-                        <h5 class="card-title d-flex">Sherlock Tak Parani</h5>
-                      </div>
-                      <div class="card-footer h-auto ">
-                          <p class="card-text text-sm-end"><small>12/09/2024</small></p>
-                      </div>
-                    </div>
-            </div>    
-            <form action="#" method="post" class="ms-2 me-2 mb-3">
-                    <div class="input-group"> <input type="text" name="message" placeholder="Type Message ..." class="form-control"> <span class="input-group-append"> <button type="button" class="btn btn-primary">
-                                KIRIM
-                            </button> </span> 
-                        </div>
-                </form>
-            </div> 
-                    <!--end::App Content-->
-        </main> <!--end::App Main--> <!--begin::Footer-->
-        
-    
+                        
+                        <input type="hidden" name="id_pengaduan" value="<?= $pengaduan_hash; ?>">
+                        
+                        <input type="hidden" name="sender_type" value="siswa"> 
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function updateLampiranLabel() {
+        const fileInput = document.getElementById('lampiran');
+        const label = document.getElementById('lampiranLabel');
+
+        if (fileInput.files && fileInput.files.length > 0) {
+            label.textContent = fileInput.files[0].name;
+        } else {
+            label.textContent = 'Lampiran';
+        }
+    }
+</script>

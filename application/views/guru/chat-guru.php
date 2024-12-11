@@ -15,21 +15,21 @@ $pengaduan_hash = $this->input->get('id_pengaduan');
                 </div>
             </div>
         </div>
-        <!--end::Row-->
+        
     </div>
-    <!--end::Container-->
+   
 </div>
-<!--end::App Content Header-->
 
-<!--begin::App Content-->
+
+
 <hr style="height: 5px; background: black;">
 <div class="app-content">
     <div class="row ms-auto me-auto justify-content-center w-auto mt-4">
         <div class="col-md-11 p-2">
             <div class="card shadow-lg border-0 rounded-lg">
-                <!-- Container dengan scroll -->
+                
                 <div class="card-body" style="height: 500px; overflow-y: scroll;">
-                    <!-- Pengaduan Awal -->
+                    
                     <div class="mb-4">
                         <div class="card shadow-lg border-0 rounded-lg">
                             <div class="card-body rounded" style="background-color: #09B2F5;">
@@ -53,7 +53,7 @@ $pengaduan_hash = $this->input->get('id_pengaduan');
                         </div>
                     </div>
                         <?php
-                        $last_date = ''; // Untuk memisahkan tanggapan berdasarkan tanggal
+                        $last_date = ''; 
                         foreach ($tanggapan as $t) {
                         // Separator waktu
                         if ($last_date != $t['tgl_tanggapan']) {
@@ -62,26 +62,46 @@ $pengaduan_hash = $this->input->get('id_pengaduan');
                         }
 
                         if ($t['sender_type'] == 'guru') {
-                            // Pesan dari guru (kanan)
+                            
                             echo '<div class="d-flex justify-content-end mb-3">';
                             echo '<div class="card text-bg-primary p-2 w-auto">';
                             echo '<p>' . htmlspecialchars($t['tanggapan']) . '</p>';
+
                             if (!empty($t['attachment'])) {
-                                echo '<a href="' . base_url('uploads/lampiran/' . $t['attachment']) . '" target="_blank" class="text-white">Lihat Lampiran</a>';
+                                $attachment_path = base_url('uploads/lampiran/' . $t['attachment']);
+                                $file_extension = strtolower(pathinfo($t['attachment'], PATHINFO_EXTENSION));
+
+                                // Periksa apakah file adalah gambar
+                                $image_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+                                if (in_array($file_extension, $image_extensions)) {
+                                    echo '<img src="' . $attachment_path . '" alt="Lampiran" class="img-fluid rounded my-2" style="max-width: 200px; max-height: 200px;">';
+                                } else {
+                                    echo '<a href="' . $attachment_path . '" target="_blank" class="text-white">Lihat Lampiran</a>';
+                                }
                             }
-                            echo '<small class="text-end">' . date('H:i', strtotime($t['jam_menit'])) . '</small>';
+                            date_default_timezone_set('Asia/Jakarta'); // Menetapkan zona waktu Indonesia
+                            echo '<small class="text-end">' . date('h:i A', strtotime($t['jam_menit'])) . '</small>';
                             echo '</div></div>';
-                        } else {
-                            // Pesan dari siswa (kiri)
-                            echo '<div class="d-flex justify-content-start mb-3">';
-                            echo '<div class="card text-bg-secondary p-2 w-auto">';
-                            echo '<p>' . htmlspecialchars($t['tanggapan']) . '</p>';
-                            if (!empty($t['attachment'])) {
-                                echo '<a href="' . base_url('uploads/lampiran/' . $t['attachment']) . '" target="_blank" class="text-white">Lihat Lampiran</a>';
+                        }else {
+                                echo '<div class="d-flex justify-content-start mb-3">';
+                                echo '<div class="card text-bg-secondary p-2 w-auto">';
+                                echo '<p>' . htmlspecialchars($t['tanggapan']) . '</p>';
+                                if (!empty($t['attachment'])) {
+                                $attachment_path = base_url('uploads/lampiran/' . $t['attachment']);
+                                $file_extension = strtolower(pathinfo($t['attachment'], PATHINFO_EXTENSION));
+
+                                // Periksa apakah file adalah gambar
+                                $image_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+                                if (in_array($file_extension, $image_extensions)) {
+                                    echo '<img src="' . $attachment_path . '" alt="Lampiran" class="img-fluid rounded my-2" style="max-width: 200px; max-height: 200px;">';
+                                } else {
+                                    echo '<a href="' . $attachment_path . '" target="_blank" class="text-white">Lihat Lampiran</a>';
+                                }
                             }
-                            echo '<small class="text-end">' . date('H:i', strtotime($t['jam_menit'])) . '</small>';
-                            echo '</div></div>';
-                        }
+                                date_default_timezone_set('Asia/Jakarta'); // Menetapkan zona waktu Indonesia
+                                echo '<small class="text-end">' . date('h:i A', strtotime($t['jam_menit'])) . '</small>';
+                                echo '</div></div>';
+                            }
                     }
 
                         ?>
@@ -98,20 +118,20 @@ $pengaduan_hash = $this->input->get('id_pengaduan');
                 <div class="card-body">
                     <form action="<?= base_url('chat/kirim_pesan'); ?>" method="POST" enctype="multipart/form-data">
     <div class="row g-2">
-        <!-- Textarea untuk Pesan -->
+        
         <div class="col-md-10">
             <textarea class="form-control" name="isi_pesan" rows="2" placeholder="Type Message ..."></textarea>
         </div>
-        <!-- Tombol Lampiran dan Kirim -->
+        
         <div class="col-md-2 d-flex justify-content-between align-items-center">
-            <label for="lampiran" class="btn btn-outline-secondary">Lampiran</label>
-            <input type="file" id="lampiran" name="lampiran" class="d-none">
+            <label for="lampiran" class="btn btn-outline-secondary" id="lampiranLabel">Lampiran</label>
+            <input type="file" id="lampiran" name="lampiran" class="d-none" onchange="updateLampiranLabel()">
             <button type="submit" class="btn btn-primary">KIRIM</button>
-        </div>
+            </div>
     </div>
-    <!-- Hidden ID Pengaduan -->
+    
     <input type="hidden" name="id_pengaduan" value="<?= $pengaduan_hash; ?>">
-    <!-- Hidden Sender Type -->
+    
     <input type="hidden" name="sender_type" value="guru"> 
 </form>
 
@@ -120,4 +140,16 @@ $pengaduan_hash = $this->input->get('id_pengaduan');
         </div>
     </div>
 </div>
-<!--end::App Content-->
+
+<script>
+    function updateLampiranLabel() {
+        const fileInput = document.getElementById('lampiran');
+        const label = document.getElementById('lampiranLabel');
+
+        if (fileInput.files && fileInput.files.length > 0) {
+            label.textContent = fileInput.files[0].name;
+        } else {
+            label.textContent = 'Lampiran';
+        }
+    }
+</script>

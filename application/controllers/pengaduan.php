@@ -24,72 +24,69 @@ class Pengaduan extends CI_Controller
 
     public function submit()
     {
-        // Muat library dan helper untuk upload file
+       
         $this->load->library('upload');
         $this->load->helper('form');
 
-        // Konfigurasi untuk unggah file
-        $config['upload_path']   = './uploads/'; // Pastikan folder ini ada dan writable
-        $config['allowed_types'] = 'jpg|jpeg|png'; // Hanya terima file gambar
-        $config['max_size']      = 2048; // Ukuran maksimum file (dalam KB)
+        $config['upload_path']   = './uploads/';
+        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['max_size']      = 10240;
 
         $this->upload->initialize($config);
 
         // Validasi jika file berhasil diunggah
-        if (!$this->upload->do_upload('foto')) { // 'foto' adalah nama input file di form
+        if (!$this->upload->do_upload('foto')) {
             $error = $this->upload->display_errors();
             $this->session->set_flashdata('error', $error);
-            redirect('pages2/home'); // Kembali ke halaman form
+            redirect('pages2/home');
         } else {
-            $upload_data = $this->upload->data(); // Data tentang file yang diunggah
+            $upload_data = $this->upload->data();
 
             // Simpan data ke database
             $data = [
                 'tgl_pengaduan' => date('Y-m-d'),
-                'waktu'         => date('H:i'), // Tambahkan waktu saat pengaduan disubmit
-                'nis'           => $this->session->userdata('nis'), // Ambil dari session pengguna
+                'waktu'         => date('H:i'),
+                'nis'           => $this->session->userdata('nis'),
                 'isi_laporan'   => $this->input->post('isi_pengaduan'),
                 'judul_pengaduan' => $this->input->post('judul'),
                 'status'        => 'belum ditanggapi',
                 'id_petugas'    => $this->input->post('id_petugas'),
-                'gambar'        => $upload_data['file_name'], // Nama file yang diunggah
+                'gambar'        => $upload_data['file_name'],
                 'filter'        => '1',
-                'status_nama'   => $this->input->post('status_nama') // Filter sensor nama
+                'status_nama'   => $this->input->post('status_nama')
             ];
 
-            $this->db->insert('pengaduan', $data); // Simpan data ke tabel `pengaduan`
+            $this->db->insert('pengaduan', $data);
             $this->session->set_flashdata('success', 'Pengaduan berhasil dikirim.');
-            redirect('pages2/home'); // Arahkan kembali ke halaman home
+            redirect('pages2/home');
         }
     }
 
     public function hapusaduan($id_pengaduan)
-{
-    // Hapus aduan berdasarkan ID
-    $this->db->where('id_pengaduan', $id_pengaduan);
-    $deleted = $this->db->delete('pengaduan');  // Mengambil hasil penghapusan
+    {
+        $this->db->where('id_pengaduan', $id_pengaduan);
+        $deleted = $this->db->delete('pengaduan'); 
 
-    // Periksa apakah penghapusan berhasil
-    if ($deleted) {
-        // Penghapusan berhasil, set flashdata untuk pesan sukses
-        $this->session->set_flashdata('message', 'Aduan berhasil dihapus.');
-        $this->session->set_flashdata('message_type', 'success');
-    } else {
-        // Penghapusan gagal, set flashdata untuk pesan error
-        $this->session->set_flashdata('message', 'Gagal menghapus aduan.');
-        $this->session->set_flashdata('message_type', 'danger');
+       
+        if ($deleted) {
+            // Penghapusan berhasil, set flashdata untuk pesan sukses
+            $this->session->set_flashdata('message', 'Aduan berhasil dihapus.');
+            $this->session->set_flashdata('message_type', 'success');
+        } else {
+            // Penghapusan gagal, set flashdata untuk pesan error
+            $this->session->set_flashdata('message', 'Gagal menghapus aduan.');
+            $this->session->set_flashdata('message_type', 'danger');
+        }
+       
+        redirect('pages2/daftaraduan');
     }
-    
-    // Redirect ke halaman daftar aduan setelah penghapusan
-    redirect('pages2/daftaraduan');
-}
 public function updatepengaduan($id_pengaduan)
     {
         
         $data = [
             'judul_pengaduan' => $this->input->post('judul'),
             'isi_laporan' => $this->input->post('isi_laporan'),
-            'id_petugas' => $this->input->post('kepada'), // Jika perlu disesuaikan
+            'id_petugas' => $this->input->post('kepada'),
         ];
 
         if ($_FILES['gambar']['name']) {

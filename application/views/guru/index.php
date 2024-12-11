@@ -51,10 +51,6 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="<?= site_url('pages3/home'); ?>">Dashboard</a></li>
                         <li><hr class="dropdown-divider" /></li>                
-                        <li><a class="dropdown-item" href="<?= site_url('pages3/peng-tanggap'); ?>">Aduan Ditanggapi</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="<?= site_url('pages3/peng-finish'); ?>">Aduan Selesai</a></li>
-                        <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="<?= site_url('pages3/akunguru'); ?>">Akun</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="<?= site_url('auth_petugas/logout'); ?>">Logout</a></li>

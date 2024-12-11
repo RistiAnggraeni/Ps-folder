@@ -12,7 +12,6 @@ class Guru extends CI_Controller {
         }
     }
 
-    // Halaman Guru
     public function index() {
         $this->load->view('guru/index');
     }
@@ -25,9 +24,6 @@ class Guru extends CI_Controller {
         $no_hp = $this->input->post('no_hp');
         $level = $this->input->post('level');
 
-
-
-        // Data untuk diupdate
         $data = [
             'username' => $username,
             'nama_guru' => $nama,
@@ -35,7 +31,6 @@ class Guru extends CI_Controller {
             'jabatan' => $jabatan,
         ];
 
-        // Lakukan update
         $this->db->where('id_petugas', $id_petugas);
         if ($this->db->update('data_petugas', $data)) {
             // Jika berhasil

@@ -4,17 +4,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Auth_siswa extends CI_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->model('Auth_model'); // Memuat model autentikasi
+        $this->load->model('Auth_model');
         $this->load->library('session');
         if ($this->session->userdata('logged_in') && $this->router->method == 'index') {
-        redirect(site_url('pages2')); // Ubah sesuai halaman dashboard Anda
+        redirect(site_url('pages2')); 
     }
     }
 
     // Halaman Login
     public function index() {
 
-        // Jika tidak login, tampilkan halaman login
         $this->load->view('login');
     }
 
@@ -25,8 +24,6 @@ class Auth_siswa extends CI_Controller {
         $password = $this->input->post('password');
         $confirm_password = $this->input->post('confirm_password');
 
-
-        // Validasi input kosong
         if (empty($nis) || empty($username) || empty($password) || empty($confirm_password)) {
             $this->session->set_flashdata('error', 'Semua kolom wajib diisi');
             redirect(site_url('auth_siswa'));
@@ -39,13 +36,11 @@ class Auth_siswa extends CI_Controller {
             return; 
         }
 
-        // Validasi password dan confirm password
         if ($password !== $confirm_password) {
             $this->session->set_flashdata('error', 'Confirm password berbeda dengan password pertama');
             redirect(site_url('auth_siswa'));
         }
 
-        // Ambil data pengguna dari database
         $user = $this->Auth_model->get_user_siswa($username);
 
         if ($user) {
@@ -59,9 +54,8 @@ class Auth_siswa extends CI_Controller {
                     redirect(site_url('auth_siswa'));
                 }
             } else {
-                // Jika password_now kosong, gunakan password_lama (tanpa hash)
                 if ($user['password_lama'] === $password) {
-                    $this->set_user_session($user); // Fungsi untuk menyimpan data ke sesi
+                    $this->set_user_session($user);
                 } else {
                     $this->session->set_flashdata('error', 'Username atau password salah');
                     redirect(site_url('auth_siswa'));
@@ -73,7 +67,6 @@ class Auth_siswa extends CI_Controller {
         }
     }
 
-    // Fungsi untuk menyimpan data pengguna ke sesi dan mengarahkan berdasarkan level
     private function set_user_session($user) {
         // Simpan data user ke sesi
         $this->session->set_userdata('logged_in', true);
@@ -83,19 +76,7 @@ class Auth_siswa extends CI_Controller {
         $this->session->set_userdata('username', $user['username']);
 
         redirect(site_url('pages2/home'));
-        // redirect(site_url('auth_siswa'));
-        // if ($user['level'] === 'guru') {
-        //     redirect(site_url('guru/index'));
-        // } elseif ($user['level'] === 'admin') {
-        //     redirect(site_url('pages/home'));
-        // } else {
-        //     // Redirect default jika level tidak dikenali
-        //     redirect(site_url('auth_petugas'));
-        // }
     }
-
-
-    // Logout
     public function logout() {
         $this->session->sess_destroy();
         redirect(site_url('pertama'));

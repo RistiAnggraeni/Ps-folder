@@ -7,7 +7,7 @@
             <div id="layoutAuthentication_content">
                 <main>
                     <div class="d-flex align-items-center">
-                                <a href="index.php" class="btn btn-primary m-3"><i class="bi bi-arrow-left"></i></a>
+                                <a href="<?= site_url('pages2/home')?>" class="btn btn-primary m-3"><i class="bi bi-arrow-left"></i></a>
                                 
                         </div>
                     <div class="container ">

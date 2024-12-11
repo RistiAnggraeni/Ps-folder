@@ -3,7 +3,7 @@
                 <div class="container-fluid"> <!--begin::Row-->
                     <div class="row">
                         <div class="d-flex align-items-center">
-                                <a href="index.php" class="btn btn-primary me-3"><i class="bi bi-arrow-left"></i></a>
+                                <a href="<?= site_url('pages2/home')?>" class="btn btn-primary me-3"><i class="bi bi-arrow-left"></i></a>
                                 <h3 class="mb-0 " style="color: #09B2F5;"><b>Daftar Nama Guru</b></h3>
                         </div>
                     </div> <!--end::Row-->
@@ -27,32 +27,24 @@
 
     <!-- Card Wrapper -->
     <div id="cardWrapper">
-      <!-- Card 1 -->
-      <div class="card shadow-sm mb-3" data-search="bapak ahmad matematika">
+  <!-- Card 1 -->
+  <?php foreach ($petugas as $s): ?>
+    <!-- Pastikan hanya petugas dengan level 'guru' yang ditampilkan -->
+    <?php if ($s['level'] == 'guru'): ?>
+      <form method="POST" action="<?= site_url('pages2/home'); ?>" class="mb-3">
+    <input type="hidden" name="id_petugas" value="<?= $s['id_petugas'] ?>">
+    <div class="card shadow-sm">
         <div class="card-body row">
-          <h5 class="card-title">Nama Guru: Bapak Ahmad</h5>
-          <p class="card-text">Mata Pelajaran: Matematika</p>
-          <a href="index.php" class="btn btn-primary w-100 mt-3">Buat Pengaduan</a>
+            <h5 class="card-title">Nama Guru: <?= $s['nama_guru'] ?></h5>
+            <p class="card-text">Mata Pelajaran: <?= $s['jabatan'] ?></p>
+            <button type="submit" class="btn btn-primary w-100 mt-3">Buat Pengaduan</button>
         </div>
-      </div>
+    </div>
+</form>
+    <?php endif; ?>
+  <?php endforeach; ?>
+</div>
 
-      <!-- Card 2 -->
-      <div class="card shadow-sm mb-3" data-search="ibu siti bahasa indonesia">
-        <div class="card-body row">
-          <h5 class="card-title">Nama Guru: Ibu Siti</h5>
-          <p class="card-text">Mata Pelajaran: Bahasa Indonesia</p>
-          <a href="index.php" class="btn btn-primary w-100 mt-3">Buat Pengaduan</a>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="card shadow-sm mb-3" data-search="bapak ali fisika">
-        <div class="card-body row">
-          <h5 class="card-title">Nama Guru: Bapak Ali</h5>
-          <p class="card-text">Mata Pelajaran: Fisika</p>
-          <a href="index.php" class="btn btn-primary w-100 mt-3">Buat Pengaduan</a>
-        </div>
-      </div>
     </div>
   </div>
 

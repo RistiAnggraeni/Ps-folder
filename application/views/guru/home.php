@@ -10,7 +10,29 @@
             <?= $this->session->flashdata('error'); ?>
         </div>
     <?php endif; ?>
+    <div class="app-content">
 
+    
+        <div class="container-fluid d-flex justify-items-center justify-content-center flex-row gap-5 mt-3 mb-2">
+            <div class="small-box text-white w-auto p-2 rounded" style="background-color: #589BFF;">
+                
+                <a href="<?= site_url('pages3/aduan-selesai'); ?>" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                    <div class="inner">
+                    <h6>Jumlah Aduan Selesai</h6>
+                    <h3 class="text-center"><?= $jumlah_finish ?></h3>
+                </div></a>
+            </div>
+            <div class="small-box text-white w-auto p-2 rounded" style="background-color: #9BEC00;">
+                
+                <a href="<?= site_url('pages3/aduan-ditanggapi'); ?>" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                    <div class="inner">
+                    <h6>Jumlah Aduan Ditanggapi</h6>
+                    <h3 class="text-center"><?= $jumlah_ditanggapi ?></h3>
+                </div>
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-11">
             <?php if (!empty($pengaduan)) : ?>

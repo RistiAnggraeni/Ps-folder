@@ -7,7 +7,6 @@ class Pages3 extends CI_Controller
     parent::__construct();
     $this->load->library('session');
     $this->load->model('Pengaduan_model');
-    // Jika belum login, redirect ke halaman login
     if (!$this->session->userdata('logged_in')) {
         redirect(site_url('pertama'));
     }
@@ -15,17 +14,15 @@ class Pages3 extends CI_Controller
 
     public function view($page = 'home')
     {
-        // Pastikan file view untuk halaman ada
         if (!file_exists(APPPATH . 'views/guru/' . $page . '.php')) {
-            show_404(); // Halaman tidak ditemukan
         }
 
-        $data['title'] = ucfirst($page); // Set judul halaman
+        $data['title'] = ucfirst($page); 
         
         if ($page === 'akunguru') {
-        // Ambil data akun berdasarkan sesi pengguna
+    
             if (!$this->session->userdata('logged_in')) {
-                redirect('login'); // Arahkan ke login jika belum login
+                redirect('login'); 
             }
 
             $user_id = $this->session->userdata('id_petugas');
@@ -33,13 +30,29 @@ class Pages3 extends CI_Controller
             $data['user'] = $this->Data_model->get_user_by_id($user_id);
         }
         if ($page === 'home') {
-        
-            $data['pengaduan'] = $this->Pengaduan_model->get_pengaduan_by_petugas();
+            $id_petugas = $this->session->userdata('id_petugas');
+            $data['pengaduan'] = $this->Pengaduan_model->get_pengaduan_by_petugas($id_petugas);
+           
+            //----------------------------------------------------------------------
+            $this->db->where('id_petugas', $id_petugas);
+            $this->db->where_in('pengaduan.status', ['ditanggapi']);
+            $jumlah_ditanggapi = $this->db->count_all_results('pengaduan');
+            
+            $data['jumlah_ditanggapi'] = $jumlah_ditanggapi;
+            //----------------------------------------------------------------------
+            $this->db->where('id_petugas', $id_petugas);
+            $this->db->where_in('pengaduan.status', ['finish']);
+            $jumlah_finish = $this->db->count_all_results('pengaduan');
+            
+            $data['jumlah_finish'] = $jumlah_finish;
                 
         }
         if ($page === 'chat-guru') {
-            // Ambil pengaduan hash dari request
+        
             $pengaduan_hash = $this->input->get('id_pengaduan');
+            //=====================================================
+            $id_pengaduan_decrypt = $this->Pengaduan_model->decrypt_pengaduan_id($pengaduan_hash);
+            //=====================================================
 
             if (!$pengaduan_hash) {
                 show_error('Data tidak valid.', 404, 'Not Found');
@@ -59,27 +72,45 @@ class Pages3 extends CI_Controller
                 $pengaduan['username'] = substr($pengaduan['username'], 0, 1) . str_repeat('*', strlen($pengaduan['username']) - 1);
             }
 
-            // Ambil tanggapan berdasarkan id_pengaduan
-            $this->db->select('*');
-            $this->db->from('tanggapan');
-            $this->db->where('id_pengaduan', $pengaduan['id_pengaduan']);
-            $this->db->order_by('tgl_tanggapan', 'ASC');
-            $this->db->order_by('jam_menit', 'ASC');
-            $tanggapan = $this->db->get()->result_array();
+            // $this->db->select('*');
+            // $this->db->from('tanggapan');
+            // $this->db->where('id_pengaduan', $pengaduan['id_pengaduan']);
+            // $this->db->order_by('tgl_tanggapan', 'ASC');
+            // $this->db->order_by('jam_menit', 'ASC');
+            // $tanggapan = $this->db->get()->result_array();
+
+            // Ambil tanggapan menggunakan model
+            $tanggapan = $this->Pengaduan_model->get_chat($id_pengaduan_decrypt);
+            // Tandai tanggapan sebagai dibaca
+            $this->Pengaduan_model->mark_responses_as_read($id_pengaduan_decrypt);
 
             $data = [
                 'pengaduan' => $pengaduan,
                 'tanggapan' => $tanggapan,
             ];
+            //=======================================================
+             
 
         }
+        if ($page === 'aduan-ditanggapi') {
+            $id_petugas = $this->session->userdata('id_petugas');
+
+            $data['aduan_ditanggapi'] = $this->Pengaduan_model->get_aduan_ditanggapi_petugas($id_petugas);
+           //===========================================================================
+            foreach ($data['aduan_ditanggapi'] as &$aduan) {
+                $aduan['unread_count'] = $this->Pengaduan_model->count_unread_responses($aduan['id_pengaduan']);
+            }
 
 
-        // Muat konten halaman
+        }
+        if ($page === 'aduan-selesai') {
+            $id_petugas = $this->session->userdata('id_petugas');
+
+            $data['aduan_selesai'] = $this->Pengaduan_model->get_aduan_selesai_petugas($id_petugas);
+           
+
+        }
         $data['content'] = $this->load->view('guru/' . $page, isset($data) ? $data : [], true);
-
-        // Muat layout utama
-
         $this->load->view('guru/index', $data);
 
     }

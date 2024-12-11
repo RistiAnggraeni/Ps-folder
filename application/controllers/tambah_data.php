@@ -5,11 +5,11 @@ class Tambah_data extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('Data_model'); // Memuat model untuk operasi database
-        $this->load->library('form_validation'); // Memuat library validasi
+        $this->load->model('Data_model'); 
+        $this->load->library('form_validation'); 
         $this->load->library('session');
     }
-// menambah data guru dan petugas
+
     public function store() {
         
         $this->form_validation->set_rules('username', 'Username', 'required|trim');
@@ -21,8 +21,7 @@ class Tambah_data extends CI_Controller {
         $this->form_validation->set_rules('confirmPassword', 'Konfirmasi Password', 'required|matches[password]');
 
         if ($this->form_validation->run() == FALSE) {
-            // Jika validasi gagal, kembali ke form dengan error message
-            // Siapkan pesan error spesifik untuk setiap field
+ 
         $errors = [
             'nis' => form_error('nis'),
             'username' => form_error('username'),
@@ -34,7 +33,7 @@ class Tambah_data extends CI_Controller {
         $this->session->set_flashdata('errors', $errors);
             redirect('pages/tambah-guru');
         } else {
-            // Jika validasi berhasil, simpan data ke database
+
             $data = [
                 'username' => $this->input->post('username'),
                 'nama_guru' => $this->input->post('nama'),
@@ -45,19 +44,15 @@ class Tambah_data extends CI_Controller {
             ];
 
             if ($this->Data_model->tambah_petugas($data)) {
-                // Redirect ke halaman sukses
                 $this->session->set_flashdata('success', 'Data berhasil ditambahkan!');
                 redirect('tambah_data/success');
             } else {
-                // Jika gagal menyimpan
                 $this->session->set_flashdata('error', 'Gagal menambahkan data. Silakan coba lagi.');
                 redirect('tambah_data');
             }
         }
     }
-    //menambahkan data siswa
     public function store2() {
-        // Aturan validasi form dengan pesan kustom
         $this->form_validation->set_rules('username', 'Username', 'required|trim', [
             'required' => 'Username harus diisi.'
         ]);
@@ -82,7 +77,6 @@ class Tambah_data extends CI_Controller {
         ]);
 
         if ($this->form_validation->run() == FALSE) {
-            // Ambil semua pesan error
             $fields = ['username', 'nis', 'nama', 'kelas', 'password', 'confirmPassword'];
             foreach ($fields as $field) {
                 $error_message = form_error($field, '<p class="text-danger">', '</p>');
@@ -90,9 +84,8 @@ class Tambah_data extends CI_Controller {
                     $this->session->set_flashdata("error_{$field}", strip_tags($error_message));
                 }
             }
-            redirect('pages/tambah-siswa'); // Redirect kembali ke form
+            redirect('pages/tambah-siswa'); 
         } else {
-            // Jika validasi berhasil, simpan data ke database
             $data = [
                 'username' => $this->input->post('username'),
                 'nis' => $this->input->post('nis'),
@@ -122,16 +115,12 @@ class Tambah_data extends CI_Controller {
         }
     }
 
-  
-    // Fungsi untuk mengubah password
     public function change_password() {
-        // Periksa apakah method request adalah POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Ambil data dari form
-            $password_new = $this->input->post('password_new', true); // Menggunakan XSS filtering
+            $password_new = $this->input->post('password_new', true); 
             $confirmPassword_new = $this->input->post('confirmPassword_new', true);
 
-            // Validasi password
             if (strlen($password_new) < 6) {
                 $this->session->set_flashdata('error', 'Password minimal 6 karakter!');
                 redirect('pages/akunpet');
@@ -143,10 +132,8 @@ class Tambah_data extends CI_Controller {
                 redirect('pages/akunpet'); // Redirect ke form ganti password
                 return;
             }
-            // Hash password
             $hashed_password = password_hash($password_new, PASSWORD_DEFAULT);
             
-            // Ambil user_id dari session
             if (!$this->session->userdata['id_petugas']) {
                 $this->session->set_flashdata('error', 'Pengguna tidak terautentikasi!');
                 redirect('login'); // Redirect ke halaman login
@@ -154,7 +141,6 @@ class Tambah_data extends CI_Controller {
             }
             $user_id = $this->session->userdata['id_petugas'];
 
-            // Update password melalui model
             $result = $this->Data_model->update_password($user_id, $hashed_password);
 
             if ($result) {
@@ -163,18 +149,16 @@ class Tambah_data extends CI_Controller {
                 $this->session->set_flashdata('error', 'Gagal mengubah password!');
             }
 
-            redirect('pages/akunpet'); // Redirect ke halaman profil pengguna
+            redirect('pages/akunpet');
         } else {
-            // Jika bukan POST, kembalikan ke form
             redirect('pages/akunpet');
         }
     }
 
     public function change_passwordguru() {
-        // Periksa apakah method request adalah POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Ambil data dari form
-            $password_new = $this->input->post('password_new', true); // Menggunakan XSS filtering
+            $password_new = $this->input->post('password_new', true);
             $confirmPassword_new = $this->input->post('confirmPassword_new', true);
 
             // Validasi password
@@ -186,7 +170,7 @@ class Tambah_data extends CI_Controller {
 
             if ($password_new !== $confirmPassword_new) {
                 $this->session->set_flashdata('error', 'Password tidak cocok!');
-                redirect('pages3/akunguru'); // Redirect ke form ganti password
+                redirect('pages3/akunguru');
                 return;
             }
             // Hash password
@@ -195,12 +179,11 @@ class Tambah_data extends CI_Controller {
             // Ambil user_id dari session
             if (!$this->session->userdata['id_petugas']) {
                 $this->session->set_flashdata('error', 'Pengguna tidak terautentikasi!');
-                redirect('login'); // Redirect ke halaman login
+                redirect('login');
                 return;
             }
             $user_id = $this->session->userdata['id_petugas'];
 
-            // Update password melalui model
             $result = $this->Data_model->update_password($user_id, $hashed_password);
 
             if ($result) {
@@ -209,21 +192,18 @@ class Tambah_data extends CI_Controller {
                 $this->session->set_flashdata('error', 'Gagal mengubah password!');
             }
 
-            redirect('pages3/akunguru'); // Redirect ke halaman profil pengguna
+            redirect('pages3/akunguru');
         } else {
-            // Jika bukan POST, kembalikan ke form
             redirect('pages3/akunguru');
         }
     }
 
     public function change_password2() {
-        // Periksa apakah method request adalah POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Ambil data dari form
-            $password_new = $this->input->post('password_new', true); // Menggunakan XSS filtering
+            $password_new = $this->input->post('password_new', true);
             $confirmPassword_new = $this->input->post('confirmPassword_new', true);
 
-            // Validasi password
             if (strlen($password_new) < 6) {
                 $this->session->set_flashdata('error', 'Password minimal 6 karakter!');
                 redirect('pages2/akun');
@@ -232,21 +212,18 @@ class Tambah_data extends CI_Controller {
 
             if ($password_new !== $confirmPassword_new) {
                 $this->session->set_flashdata('error', 'Password tidak cocok!');
-                redirect('pages2/akun'); // Redirect ke form ganti password
+                redirect('pages2/akun');
                 return;
             }
-            // Hash password
             $hashed_password = password_hash($password_new, PASSWORD_DEFAULT);
             
-            // Ambil user_id dari session
             if (!$this->session->userdata['nis']) {
                 $this->session->set_flashdata('error', 'Pengguna tidak terautentikasi!');
-                redirect('login'); // Redirect ke halaman login
+                redirect('login'); 
                 return;
             }
             $user_nis = $this->session->userdata['nis'];
 
-            // Update password melalui model
             $result = $this->Data_model->update_password2($user_nis, $hashed_password);
 
             if ($result) {
@@ -255,9 +232,8 @@ class Tambah_data extends CI_Controller {
                 $this->session->set_flashdata('error', 'Gagal mengubah password!');
             }
 
-            redirect('pages2/akun'); // Redirect ke halaman profil pengguna
+            redirect('pages2/akun');
         } else {
-            // Jika bukan POST, kembalikan ke form
             redirect('pages2/akun');
         }
     }
@@ -269,14 +245,12 @@ class Tambah_data extends CI_Controller {
         $nama_lengkap = $this->input->post('nama_lengkap');
         $kelas = $this->input->post('kelas');
 
-        // Validasi: Pastikan semua kolom diisi
         if (empty($nis) || empty($username) || empty($nama_lengkap) || empty($kelas)) {
             $this->session->set_flashdata('error', 'Semua kolom wajib diisi.');
             redirect('pertama/reset_form'); // Kembali ke halaman reset password
             return;
         }
 
-        // Cek apakah sudah ada pengajuan reset dengan nis yang sama
         $this->load->model('Siswa_model');
         if ($this->Siswa_model->check_existing_reset_request($nis)) {
             $this->session->set_flashdata('error', 'Pengajuan reset password sudah dilakukan sebelumnya.');
@@ -284,7 +258,6 @@ class Tambah_data extends CI_Controller {
             return;
         }
 
-        // Cek apakah data siswa valid
         $siswa = $this->Siswa_model->get_siswa_by_nis($nis);
 
         if (!$siswa) {
@@ -292,15 +265,12 @@ class Tambah_data extends CI_Controller {
             redirect('pertama/reset_form');
             return;
         }
-
-        // Periksa apakah username, nama lengkap, dan kelas sesuai dengan data di database
         if ($siswa['username'] !== $username || $siswa['nama_lengkap'] !== $nama_lengkap || $siswa['kelas'] !== $kelas) {
             $this->session->set_flashdata('error', 'Data yang Anda masukkan tidak valid.');
             redirect('pertama/reset_form');
             return;
         }
 
-        // Jika semua valid, simpan data ke tabel daftar_reset
         $data = [
             'nis' => $nis,
             'username' => $username,
@@ -308,9 +278,8 @@ class Tambah_data extends CI_Controller {
             'kelas' => $kelas
         ];
 
-        $this->Siswa_model->insert_reset_request($data); // Fungsi untuk memasukkan ke tabel daftar_reset
-
-        // Set flashdata sukses
+        $this->Siswa_model->insert_reset_request($data); 
+        
         $this->session->set_flashdata('success', 'Pengajuan reset password berhasil.');
         redirect('pertama/reset_form'); // Redirect kembali ke halaman reset
     }

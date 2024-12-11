@@ -24,10 +24,13 @@
                     <div class="card shadow-lg border-0 rounded-lg mt-2">
                         <div class="card-body rounded" style="background-color: #09B2F5;">
                             <div class="float-sm-end text-white"><?= date('d/m/Y', strtotime($aduan['tgl_pengaduan'] )) ?></div>
-                            <form>
+                            <form action="<?= base_url('pengaduan_status/selesai_pengaduan'); ?>" method="POST">
                                 <div class="form-floating mb-3 col-md-5">
-                                    <input class="form-control" readonly type="text" value="<?= $aduan['nama_guru']; ?>" />
-                                    <label for="floatingTextarea2">Kepada : </label>
+                                    <?php
+                                    $username = ($aduan['status_nama'] == '1') ? substr($aduan['username'], 0, 1) . str_repeat('*', strlen($aduan['username']) - 1) : $aduan['username'];
+                                    ?>
+                                    <input class="form-control" readonly type="text" value="<?= $username ?>" />
+                                    <label for="floatingTextarea2">Oleh :</label>
                                 </div>
                                 <div class="form-floating mb-3 col-md-5">
                                     <input class="form-control" readonly type="text" value="<?= $aduan['judul_pengaduan']; ?>" />
@@ -41,10 +44,22 @@
                                     <label for="floatingTextarea2">Isi Pengaduan</label>
                                 </div>
                                 <div class="d-flex justify-content-between mt-4 position-relative">
-                                    <a href="<?= site_url('pages2/chat-siswa?id_pengaduan=' . md5($aduan['id_pengaduan'])); ?>" 
-                                       class="btn text-white btn-primary">
+                                    <div>
+                                            <input type="hidden" name="id_pengaduan" value="<?= $aduan['id_pengaduan']; ?>">
+                                            <input type="hidden" name="status" value="finish">
+                                            <button type="submit" class="btn text-white btn-danger" onclick="return confirm('Apakah Anda yakin ingin menyelesaikan pengaduan ini?');">Selesai</button>
+                                        </div>
+
+                                    <a href="<?= site_url('pages3/chat-guru?id_pengaduan=' . md5($aduan['id_pengaduan'])); ?>" 
+                                       class="btn text-white btn-primary position-relative">
                                        Buka
+                                       <?php if ($aduan['unread_count'] > 0): ?>
+                                           <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                               <span class="visually-hidden">Unread</span>
+                                           </span>
+                                       <?php endif; ?>
                                     </a>
+
                                     
                                 </div>
 

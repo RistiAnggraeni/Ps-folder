@@ -20,7 +20,7 @@ class Pages extends CI_Controller
             show_404(); // Halaman tidak ditemukan
         }
 
-        $data['title'] = ucfirst($page); // Set judul halaman
+        $data['title'] = ucfirst($page);
 
         if ($page === 'home') {
             $this->load->model('Pengaduan_model'); 
@@ -36,14 +36,14 @@ class Pages extends CI_Controller
             $data['petugas'] = $this->Data_model->get_all_petugas(); 
         }
         if ($page === 'daftarreset') {
-            $this->load->model('Data_model'); // Muat model siswa
-            $data['dafres'] = $this->Data_model->get_all_daftar(); // Ambil data siswa
+            $this->load->model('Data_model'); 
+            $data['dafres'] = $this->Data_model->get_all_daftar();
 
         }
         if ($page === 'akunpet') {
         // Ambil data akun berdasarkan sesi pengguna
             if (!$this->session->userdata('logged_in')) {
-                redirect('login'); // Arahkan ke login jika belum login
+                redirect('login');
             }
 
             $user_id = $this->session->userdata('id_petugas');
@@ -83,12 +83,11 @@ class Pages extends CI_Controller
 
         // Redirect kembali ke halaman sebelumnya dengan pesan sukses
         $this->session->set_flashdata('success', 'Data siswa berhasil dihapus.');
-        redirect('pages/datasiswa'); // Ganti 'pages/datasiswa' dengan halaman utama Anda
+        redirect('pages/datasiswa');
     }
 
     public function reset_password($id_petugas)
     {
-        // Load model petugas
         $this->load->model('Petugas_model');
 
         // Ambil data petugas berdasarkan ID
@@ -98,7 +97,6 @@ class Pages extends CI_Controller
             // Reset password_now
             $this->Petugas_model->update_password($id_petugas, '');
 
-            // Set flashdata dengan informasi reset berhasil
             $this->session->set_flashdata(
                 'success',
                 'Reset berhasil dilakukan. Berikut password untuk ' . $petugas['username'] . ': ' . $petugas['password_lama']
@@ -107,7 +105,6 @@ class Pages extends CI_Controller
             $this->session->set_flashdata('error', 'Data petugas tidak ditemukan.');
         }
 
-        // Redirect kembali ke halaman data guru
         redirect('pages/dataguru');
     }
 
@@ -119,10 +116,8 @@ class Pages extends CI_Controller
         $siswa = $this->Siswa_model->get_siswa_by_nis($nis);
 
         if ($siswa) {
-            // Reset password_now
             $this->Siswa_model->update_password($nis, '');
 
-            // Set flashdata dengan informasi reset berhasil
             $this->session->set_flashdata(
                 'success',
                 'Reset berhasil dilakukan. Berikut password untuk ' . $siswa['username'] . ': ' . $siswa['password_lama']
@@ -137,31 +132,26 @@ class Pages extends CI_Controller
     }
     public function reset_password_siswa($nis)
     {
-        // Load model yang diperlukan
         $this->load->model('Siswa_model');
         $this->load->model('DaftarReset_model');
 
-        // Ambil data siswa berdasarkan NIS
         $siswa = $this->Siswa_model->get_siswa_by_nis($nis);
 
         if ($siswa) {
-            // Reset password_now di tabel data_siswa
+
             $this->Siswa_model->update_password($nis, '');
 
-            // Hapus data dari tabel daftar_reset
             $this->DaftarReset_model->delete_by_nis($nis);
 
-            // Set flashdata untuk notifikasi sukses
             $this->session->set_flashdata(
                 'success',
                 'Reset berhasil dilakukan. Berikut password untuk ' . $siswa['username'] . ': ' . $siswa['password_lama']
             );
         } else {
-            // Jika siswa tidak ditemukan
+
             $this->session->set_flashdata('error', 'Data siswa tidak ditemukan.');
         }
 
-        // Redirect kembali ke halaman daftar reset
         redirect('pages/daftarreset');
     }
 

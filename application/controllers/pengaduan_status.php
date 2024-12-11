@@ -6,19 +6,15 @@ class Pengaduan_status extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Pengaduan_model'); // Pastikan ada model ini
+        $this->load->model('Pengaduan_model');
         
     }
 
-    // Method untuk update status pengaduan
     public function updateStatus()
     {
-        
-        // Ambil input dari form
         $id_pengaduan = $this->input->post('id_pengaduan');
         $status = $this->input->post('status');
 
-        // Validasi input
         if (empty($id_pengaduan) || empty($status)) {
             $this->session->set_flashdata('error', 'Data tidak valid.');
             redirect('pages3/home'); // Redirect kembali ke halaman utama
@@ -28,18 +24,14 @@ class Pengaduan_status extends CI_Controller
         $update = $this->Pengaduan_model->updateStatus($id_pengaduan, $status);
 
         if ($update) {
-            $this->session->set_flashdata('success', 'Status berhasil diperbarui.');
+            $this->session->set_flashdata('success', 'Pengaduan berhasil diselesaikan.');
         } else {
-            $this->session->set_flashdata('error', 'Gagal memperbarui status.');
+            $this->session->set_flashdata('error', 'Terjadi kesalahan saat menyelesaikan pengaduan.');
         }
-
-        // Redirect kembali ke halaman utama
         redirect('pages3/home');
     }
     public function updateFilter()
     {
-        
-        // Ambil data dari POST
         $id_pengaduan = $this->input->post('id_pengaduan');
         $filter = $this->input->post('filter');
 
@@ -52,9 +44,48 @@ class Pengaduan_status extends CI_Controller
         } else {
             $this->session->set_flashdata('error', 'Gagal memperbarui filter.');
         }
-
-        // Redirect kembali ke halaman utama
         redirect('pages/home');
     }
+    public function selesai_pengaduan()
+    {
+            $id_pengaduan = $this->input->post('id_pengaduan');
+            $status = $this->input->post('status');
 
+            if (empty($id_pengaduan) || empty($status)) {
+                $this->session->set_flashdata('error', 'Data tidak valid.');
+                redirect('pages3/aduan-ditanggapi'); // Redirect kembali ke halaman utama
+            }
+
+            $update = $this->Pengaduan_model->updateStatus($id_pengaduan, $status);
+
+            if ($update) {
+                $this->session->set_flashdata('success', 'Status pengaduan berhasil diubah.');
+            } else {
+                $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengunah status pengaduan pengaduan.');
+            }
+
+            redirect('pages3/aduan-ditanggapi');
+    }
+    public function hapus_buka_pengaduan()
+    {
+
+            $id_pengaduan = $this->input->post('id_pengaduan');
+            $status = $this->input->post('status');
+
+            if (empty($id_pengaduan) || empty($status)) {
+                $this->session->set_flashdata('error', 'Data tidak valid.');
+                redirect('pages3/aduan-selesai');
+            }
+
+            $update = $this->Pengaduan_model->updateStatus($id_pengaduan, $status);
+
+            if ($update) {
+                $this->session->set_flashdata('success', 'Status pengaduan berhasil diubah.');
+            } else {
+                $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengunah status pengaduan pengaduan.');
+            }
+
+            // Redirect kembali ke halaman utama
+            redirect('pages3/aduan-selesai');
+        }
 }

@@ -40,13 +40,19 @@
                                     <label for="floatingTextarea2">Isi Pengaduan</label>
                                 </div>
                                 <div class="d-flex justify-content-between mt-4">
-                                    <?php if ($aduan['status'] === 'belum ditanggapi') : ?>
+                                    <?php if ($aduan['filter'] === '0') : ?>
+                                        <div class="alert alert-danger w-100 " role="alert">
+                                          Maaf, aduan anda telah di nonaktifkan oleh admin.
+                                        </div>
+                                    <?php elseif ($aduan['status'] === 'belum ditanggapi') : ?>
                                         <a href="<?= site_url('pages2/editpengaduan-siswa?id_pengaduan='.md5($aduan['id_pengaduan'])); ?>" class="btn w-auto text-white btn-primary">Edit</a>
                                         <a href="<?= site_url('pengaduan/hapusaduan/'.$aduan['id_pengaduan']); ?>" class="btn w-auto text-white btn-danger" onclick="return confirmDelete();">Hapus</a>
                                     <?php elseif ($aduan['status'] === 'ditanggapi') : ?>
-                                        <a href="<?= site_url('pages2/chat-siswa?id_pengaduan=' . md5($aduan['id_pengaduan'])); ?>" class="btn w-auto text-white btn-primary">Buka</a>
+                                        <a href="<?= site_url('pages2/chat-siswa?id_pengaduan=' . md5($aduan['id_pengaduan'])); ?>" class="btn w-auto text-white btn-success">Buka</a>
                                     <?php elseif ($aduan['status'] === 'finish' || $aduan['status'] === 'endelete') : ?>
-                                        <button  class="btn btn-success">Pengaduan Selesai</button>
+                                        <div class="alert alert-success w-100 " role="alert">
+                                          Aduan Anda Telah Diselesaikan Oleh Guru Yang Bersangkutan.
+                                        </div>
                                     <?php endif; ?>
                                 </div>
                             </form>

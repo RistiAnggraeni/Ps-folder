@@ -42,8 +42,13 @@
                                 </div>
                                 <div class="d-flex justify-content-between mt-4 position-relative">
                                     <a href="<?= site_url('pages2/chat-siswa?id_pengaduan=' . md5($aduan['id_pengaduan'])); ?>" 
-                                       class="btn text-white btn-primary">
+                                       class="btn text-white btn-success position-relative">
                                        Buka
+                                       <?php if ($aduan['unread_count'] > 0): ?>
+                                           <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                               <span class="visually-hidden">Unread</span>
+                                           </span>
+                                       <?php endif; ?>
                                     </a>
                                     
                                 </div>

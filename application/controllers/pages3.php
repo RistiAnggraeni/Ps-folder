@@ -71,26 +71,14 @@ class Pages3 extends CI_Controller
             if ($pengaduan['status_nama'] == '1') {
                 $pengaduan['username'] = substr($pengaduan['username'], 0, 1) . str_repeat('*', strlen($pengaduan['username']) - 1);
             }
-
-            // $this->db->select('*');
-            // $this->db->from('tanggapan');
-            // $this->db->where('id_pengaduan', $pengaduan['id_pengaduan']);
-            // $this->db->order_by('tgl_tanggapan', 'ASC');
-            // $this->db->order_by('jam_menit', 'ASC');
-            // $tanggapan = $this->db->get()->result_array();
-
-            // Ambil tanggapan menggunakan model
             $tanggapan = $this->Pengaduan_model->get_chat($id_pengaduan_decrypt);
-            // Tandai tanggapan sebagai dibaca
             $this->Pengaduan_model->mark_responses_as_read($id_pengaduan_decrypt);
 
             $data = [
                 'pengaduan' => $pengaduan,
                 'tanggapan' => $tanggapan,
             ];
-            //=======================================================
-             
-
+          
         }
         if ($page === 'aduan-ditanggapi') {
             $id_petugas = $this->session->userdata('id_petugas');

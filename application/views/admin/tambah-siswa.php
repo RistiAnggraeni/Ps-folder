@@ -1,13 +1,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <div class="container">
-        <form method="post" action="<?= site_url('tambah_data/upload_excel') ?>" enctype="multipart/form-data">
-        <div class="d-flex justify-content-start align-items-center mt-2">
-            <label class="btn btn-primary d-flex justify-content-center align-items-center" style="max-width: 8rem; max-height: 2rem;">
-                <i class="fas fa-plus me-2"></i>Data Excel
-                <input type="file" name="file_excel" accept=".xlsx, .xls" style="display: none;">
-            </label>
-        </div>
-    </form>
+        <a href="<?= site_url('pages/import_siswa')?>" class="btn btn-primary mt-2 d-flex justify-content-start align-items-center" style="max-width: 8rem; max-height: 2rem;"><i class="fas fa-plus me-2"></i>Data Excel</a>
+
         <div class="row justify-content-center">
 
         <div class="col-lg-6 p-2 d-flex align-items-start">

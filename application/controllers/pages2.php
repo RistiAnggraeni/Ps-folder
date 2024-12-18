@@ -62,17 +62,54 @@ class Pages2 extends CI_Controller
             $data['aduan'] = $this->Pengaduan_model->get_pengaduan_by_md5($md5_id_pengaduan);
             $data['data_petugas'] = $this->Pengaduan_model->get_all_guru();
         }
-        if ($page === 'pengaduanDitanggapi-siswa') {
-            $nis = $this->session->userdata('nis');
+        // if ($page === 'pengaduanDitanggapi-siswa') {
+        //     $nis = $this->session->userdata('nis');
 
-            $data['aduan_ditanggapi'] = $this->Pengaduan_model->get_aduan_ditanggapi($nis);
+        //     $data['aduan_ditanggapi'] = $this->Pengaduan_model->get_aduan_ditanggapi($nis);
            
 
-        }
-        if ($page === 'chat-siswa') {
+        // }
+        // if ($page === 'chat-siswa') {
              
         
+        //     $pengaduan_hash = $this->input->get('id_pengaduan');
+
+        //     if (!$pengaduan_hash) {
+        //         show_error('Data tidak valid.', 404, 'Not Found');
+        //     }
+
+            // $this->db->select('pengaduan.*, data_petugas.nama_guru, data_petugas.id_petugas');
+            // $this->db->from('pengaduan');
+            // $this->db->join('data_petugas', 'pengaduan.id_petugas = data_petugas.id_petugas', 'left');
+            // $this->db->where('md5(pengaduan.id_pengaduan)', $pengaduan_hash);
+            // $pengaduan = $this->db->get()->row_array();
+
+        //     if (!$pengaduan) {
+        //         show_error('Pengaduan tidak ditemukan.', 404, 'Not Found');
+        //     }
+
+        //     $this->db->select('*');
+        //     $this->db->from('tanggapan');
+        //     $this->db->where('id_pengaduan', $pengaduan['id_pengaduan']);
+        //     $this->db->order_by('tgl_tanggapan', 'ASC');
+        //     $this->db->order_by('jam_menit', 'ASC');
+        //     $tanggapan = $this->db->get()->result_array();
+
+        //     $data = [
+        //         'pengaduan' => $pengaduan,
+        //         'tanggapan' => $tanggapan,
+        //     ];
+
+        // } 
+
+
+
+        if ($page === 'chat-siswa') {
+        
             $pengaduan_hash = $this->input->get('id_pengaduan');
+            //=====================================================
+            $id_pengaduan_decrypt = $this->Pengaduan_model->decrypt_pengaduan_id($pengaduan_hash);
+            //=====================================================
 
             if (!$pengaduan_hash) {
                 show_error('Data tidak valid.', 404, 'Not Found');
@@ -84,23 +121,43 @@ class Pages2 extends CI_Controller
             $this->db->where('md5(pengaduan.id_pengaduan)', $pengaduan_hash);
             $pengaduan = $this->db->get()->row_array();
 
+
             if (!$pengaduan) {
                 show_error('Pengaduan tidak ditemukan.', 404, 'Not Found');
             }
 
-            $this->db->select('*');
-            $this->db->from('tanggapan');
-            $this->db->where('id_pengaduan', $pengaduan['id_pengaduan']);
-            $this->db->order_by('tgl_tanggapan', 'ASC');
-            $this->db->order_by('jam_menit', 'ASC');
-            $tanggapan = $this->db->get()->result_array();
+            // $this->db->select('*');
+            // $this->db->from('tanggapan');
+            // $this->db->where('id_pengaduan', $pengaduan['id_pengaduan']);
+            // $this->db->order_by('tgl_tanggapan', 'ASC');
+            // $this->db->order_by('jam_menit', 'ASC');
+            // $tanggapan = $this->db->get()->result_array();
+
+            // Ambil tanggapan menggunakan model
+            $tanggapan = $this->Pengaduan_model->get_chat($id_pengaduan_decrypt);
+            // Tandai tanggapan sebagai dibaca
+            $this->Pengaduan_model->mark_responses_as_read_siswa($id_pengaduan_decrypt);
 
             $data = [
                 'pengaduan' => $pengaduan,
                 'tanggapan' => $tanggapan,
             ];
+            //=======================================================
+             
 
-        }        if ($page === 'daftar') {
+        }
+        if ($page === 'pengaduanDitanggapi-siswa') {
+            $nis = $this->session->userdata('nis');
+
+            $data['aduan_ditanggapi'] = $this->Pengaduan_model->get_aduan_ditanggapi($nis);
+           //===========================================================================
+            foreach ($data['aduan_ditanggapi'] as &$aduan) {
+                $aduan['unread_count'] = $this->Pengaduan_model->count_unread_responses_siswa($aduan['id_pengaduan']);
+            }
+
+
+        }     
+        if ($page === 'daftar') {
             
             $data['petugas'] = $this->Data_model->get_all_petugas(); 
         }

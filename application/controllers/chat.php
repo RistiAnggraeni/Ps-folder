@@ -4,14 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Chat extends CI_Controller {
     public function kirim_pesan()
     {
-        $this->form_validation->set_rules('isi_pesan', 'Pesan', 'required');
-        $pengaduan_hash = $this->input->post('id_pengaduan'); // Mengambil hash dari request
+        $pengaduan_hash = $this->input->post('id_pengaduan'); 
 
-        if ($this->form_validation->run() === FALSE) {
-            $this->session->set_flashdata('error', 'Pesan tidak boleh kosong');
-            redirect('pages3/chat-guru?id_pengaduan=' . $pengaduan_hash);
-        } else {
-            // Cari id_pengaduan berdasarkan hash
             $this->db->select('id_pengaduan');
             $this->db->where('MD5(id_pengaduan)', $pengaduan_hash);
             $pengaduan = $this->db->get('pengaduan')->row_array();
@@ -21,7 +15,7 @@ class Chat extends CI_Controller {
                 redirect('pages3/chat-guru?id_pengaduan=' . $pengaduan_hash);
             }
 
-            $id_pengaduan = $pengaduan['id_pengaduan']; // ID asli dari hash
+            $id_pengaduan = $pengaduan['id_pengaduan'];
             $isi_pesan = $this->input->post('isi_pesan');
             $sender_type = $this->input->post('sender_type');
             $id_petugas = $this->session->userdata('id_petugas'); 
@@ -44,7 +38,12 @@ class Chat extends CI_Controller {
                     redirect('pages3/chat-guru?id_pengaduan=' . $pengaduan_hash);
                 }
             }
+            if (empty($isi_pesan) && empty($lampiran)) {
+                $this->session->set_flashdata('error', 'Isi pesan atau lampiran harus diisi.');
+                redirect('pages2/chat-siswa?id_pengaduan=' . $pengaduan_hash);
+            }
 
+            date_default_timezone_set('Asia/Jakarta');
             $data = array(
                 'id_pengaduan' => $id_pengaduan,
                 'tanggapan' => $isi_pesan,
@@ -71,18 +70,34 @@ class Chat extends CI_Controller {
 
             $this->session->set_flashdata('success', 'Pesan berhasil dikirim');
             redirect('pages3/chat-guru?id_pengaduan=' . $pengaduan_hash);
-        }
+        
     }
+    public function get_messages()
+        {
+        $this->load->model('Pengaduan_model');
+        $pengaduan_hash = $this->input->get('id_pengaduan');
+        $id_pengaduan = $this->Pengaduan_model->decrypt_pengaduan_id($pengaduan_hash);
+        
+        if (!$id_pengaduan) {
+            show_404();
+        }
+
+        $tanggapan = $this->Pengaduan_model->get_chat($id_pengaduan);
+
+        $output = [
+            'status' => 'success',
+            'data' => $tanggapan
+        ];
+
+        header('Content-Type: application/json');
+        echo json_encode($output);
+    }
+   
     public function kirim_pesan_siswa()
     {
-        $this->form_validation->set_rules('isi_pesan', 'Pesan', 'required');
-        $pengaduan_hash = $this->input->post('id_pengaduan'); // Mengambil hash dari request
 
-        if ($this->form_validation->run() === FALSE) {
-            $this->session->set_flashdata('error', 'Pesan tidak boleh kosong');
-            redirect('pages2/chat-siswa?id_pengaduan=' . $pengaduan_hash);
-        } else {
-            // Cari id_pengaduan berdasarkan hash
+        $pengaduan_hash = $this->input->post('id_pengaduan');
+
             $this->db->select('id_pengaduan');
             $this->db->where('MD5(id_pengaduan)', $pengaduan_hash);
             $pengaduan = $this->db->get('pengaduan')->row_array();
@@ -92,7 +107,7 @@ class Chat extends CI_Controller {
                 redirect('pages2/chat-siswa?id_pengaduan=' . $pengaduan_hash);
             }
 
-            $id_pengaduan = $pengaduan['id_pengaduan']; // ID asli dari hash
+            $id_pengaduan = $pengaduan['id_pengaduan'];
             $isi_pesan = $this->input->post('isi_pesan');
             $sender_type = $this->input->post('sender_type');
             $id_petugas = $this->session->userdata('id_petugas'); 
@@ -115,7 +130,11 @@ class Chat extends CI_Controller {
                     redirect('pages2/chat-siswa?id_pengaduan=' . $pengaduan_hash);
                 }
             }
-
+            if (empty($isi_pesan) && empty($lampiran)) {
+                $this->session->set_flashdata('error', 'Isi pesan atau lampiran harus diisi.');
+                redirect('pages2/chat-siswa?id_pengaduan=' . $pengaduan_hash);
+            }
+            date_default_timezone_set('Asia/Jakarta');
             $data = array(
                 'id_pengaduan' => $id_pengaduan,
                 'tanggapan' => $isi_pesan,
@@ -142,6 +161,27 @@ class Chat extends CI_Controller {
 
             $this->session->set_flashdata('success', 'Pesan berhasil dikirim');
             redirect('pages2/chat-siswa?id_pengaduan=' . $pengaduan_hash);
-        }
+        
     }
+    public function get_messages_by_siswa()
+    {
+        $this->load->model('Pengaduan_model');
+        $pengaduan_hash = $this->input->get('id_pengaduan');
+        $id_pengaduan = $this->Pengaduan_model->decrypt_pengaduan_id($pengaduan_hash);
+        
+        if (!$id_pengaduan) {
+            show_404();
+        }
+
+        $tanggapan = $this->Pengaduan_model->get_chat($id_pengaduan);
+
+        $output = [
+            'status' => 'success',
+            'data' => $tanggapan
+        ];
+
+        header('Content-Type: application/json');
+        echo json_encode($output);
+    }
+
 }

@@ -1,8 +1,7 @@
                     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
                     <div class="container ">
-                        <button class="btn btn-primary mt-2 d-flex justify-content-start align-items-center" style="max-width: 8rem; max-height: 2rem;">
-                                <i class="fas fa-plus me-2"></i>Data Excel
-                            </button>
+                        <a href="<?= site_url('pages/import_guru')?>" class="btn btn-primary mt-2 d-flex justify-content-start align-items-center" style="max-width: 8rem; max-height: 2rem;"><i class="fas fa-plus me-2"></i>Data Excel</a>
+                        
                     <div class="row justify-content-center">
                         <div class="row justify-content-center">
                             <div class="col-lg-6 p-2">

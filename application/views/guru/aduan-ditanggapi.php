@@ -51,7 +51,7 @@
                                         </div>
 
                                     <a href="<?= site_url('pages3/chat-guru?id_pengaduan=' . md5($aduan['id_pengaduan'])); ?>" 
-                                       class="btn text-white btn-primary position-relative">
+                                       class="btn text-white btn-success position-relative">
                                        Buka
                                        <?php if ($aduan['unread_count'] > 0): ?>
                                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
@@ -75,6 +75,6 @@
 <script>
     function confirmDelete() {
         var result = confirm("Apakah Anda yakin ingin menghapus pengaduan ini?");
-        return result; // Jika user klik OK, return true, jika Cancel return false
+        return result;
     }
 </script>

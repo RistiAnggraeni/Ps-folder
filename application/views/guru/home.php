@@ -74,9 +74,9 @@
                                     <?php endif; ?>
                                     <div>
                                         <?php if ($row['status'] == 'belum ditanggapi') : ?>
-                                            <a href="<?= site_url('pages3/chat-guru?id_pengaduan=' . $row['pengaduan_hash']); ?>" class="btn text-white btn-success">Tanggapi</a>
+                                            <a href="<?= site_url('pages3/chat-guru?id_pengaduan=' . $row['pengaduan_hash']); ?>" class="btn text-white btn-primary">Tanggapi</a>
                                         <?php elseif ($row['status'] == 'ditanggapi') : ?>
-                                            <a href="<?= site_url('pages3/chat-guru?id_pengaduan=' . $row['pengaduan_hash']); ?>" class="btn text-white btn-primary">Buka</a>
+                                            <a href="<?= site_url('pages3/chat-guru?id_pengaduan=' . $row['pengaduan_hash']); ?>" class="btn text-white btn-sucess">Buka</a>
                                         <?php endif; ?>
                                     </div>
                                 </div>

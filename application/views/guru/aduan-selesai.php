@@ -64,7 +64,7 @@
                                 <form action="<?= base_url('pengaduan_status/hapus_buka_pengaduan'); ?>" method="POST" style="display: inline;">
                                     <input type="hidden" name="id_pengaduan" value="<?= $aduan['id_pengaduan']; ?>">
                                     <input type="hidden" name="status" value="ditanggapi">
-                                    <button type="submit" class="btn text-white btn-primary" onclick="return confirm('Apakah Anda yakin ingin membuka kembali pengaduan ini?');">Buka Kembali</button>
+                                    <button type="submit" class="btn text-white btn-success" onclick="return confirm('Apakah Anda yakin ingin membuka kembali pengaduan ini?');">Buka Kembali</button>
                                 </form>
                             </div>
                         </div>

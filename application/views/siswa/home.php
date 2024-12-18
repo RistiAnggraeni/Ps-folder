@@ -2,13 +2,11 @@
 $data['petugas'] = $this->Petugas_model->get_all_petugas();
  $id_petugas_terpilih = $this->input->post('id_petugas');
         $nama_guru_terpilih = null;
-
-        // Cek apakah id_petugas_terpilih ada, dan cari nama guru yang sesuai
         if ($id_petugas_terpilih) {
             foreach ($data['petugas'] as $p) {
                 if ($p['id_petugas'] == $id_petugas_terpilih) {
                     $nama_guru_terpilih = $p['nama_guru'] . ' - ' . $p['jabatan'];
-                    break; // Keluar setelah ditemukan
+                    break; 
                 }
             }
         }
@@ -84,14 +82,12 @@ $data['petugas'] = $this->Petugas_model->get_all_petugas();
 
                     <div class="d-flex justify-content-between">
                         <div class="mb-3 form-check">
-                            <!-- Input hidden untuk status_nama yang akan mengirimkan 0 jika checkbox tidak dicentang -->
                             <input type="hidden" name="status_nama" value="0">
-                            <!-- Checkbox akan mengirimkan nilai 1 jika dicentang -->
                             <input type="checkbox" class="form-check-input text-white" id="exampleCheck1" name="status_nama" value="1">
                             <label class="form-check-label" for="exampleCheck1">Sensor nama anda</label>
                         </div>
 
-                        <button type="submit" class="btn btn-secondary ">Submit</button>
+                        <button type="submit" class="btn btn-success">Submit</button>
                     </div>
                 </div>
             </form>

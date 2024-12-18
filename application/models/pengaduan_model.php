@@ -66,6 +66,8 @@ class Pengaduan_model extends CI_Model
         $this->db->select('pengaduan.*, data_petugas.nama_guru');
         $this->db->join('data_petugas', 'data_petugas.id_petugas = pengaduan.id_petugas');
         $this->db->where('pengaduan.status', 'ditanggapi');
+        $this->db->order_by('pengaduan.tgl_pengaduan', 'DESC');  
+        $this->db->order_by('pengaduan.waktu', 'DESC');
         $this->db->where_in('pengaduan.nis', $nis);
         $query = $this->db->get('pengaduan');
         return $query->result_array();
@@ -139,7 +141,13 @@ class Pengaduan_model extends CI_Model
     }
 
     //===================================================================================
-    public function count_unread_responses($id_pengaduan)
+    // public function count_unread_responses($id_pengaduan)
+    // {
+    //     $this->db->where('id_pengaduan', $id_pengaduan);
+    //     $this->db->where('is_read', '0');
+    //     return $this->db->count_all_results('tanggapan');
+    // }
+ public function count_unread_responses($id_pengaduan)
     {
         $this->db->where('id_pengaduan', $id_pengaduan);
         $this->db->where('is_read', '0');
@@ -167,6 +175,17 @@ public function get_chat($id_pengaduan)
     $this->db->order_by('jam_menit', 'ASC'); // Jika waktu tanggapan disimpan secara terpisah
     return $this->db->get()->result_array();
 }
-
-
+//======================================================================================
+ public function count_unread_responses_siswa($id_pengaduan)
+    {
+        $this->db->where('id_pengaduan', $id_pengaduan);
+        $this->db->where('siswa_read', '0');
+        return $this->db->count_all_results('tanggapan');
+    }
+public function mark_responses_as_read_siswa($id_pengaduan)
+{
+    $this->db->where('id_pengaduan', $id_pengaduan);
+    $this->db->where('siswa_read', '0');
+    $this->db->update('tanggapan', ['siswa_read' => '1']);
+}
 }
